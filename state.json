@@ -50,6 +50,16 @@
                 "원"
             ],
             "answer": 4
+        },
+        {
+            "question": "파이썬의 확장자는?",
+            "choices": [
+                ".java",
+                ".py",
+                ".html",
+                ".css"
+            ],
+            "answer": 2
         }
     ]
 }

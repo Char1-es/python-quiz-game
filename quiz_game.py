@@ -143,6 +143,43 @@ class QuizGame:
         else:
             print(f"현재 최고 점수: {self.high_score}점")
 
+    def add_quiz(self):
+        print("\n===== 퀴즈 추가 =====")
+
+        question = input("질문을 입력해 줘: ").strip()
+
+        if not question:
+            print("질문은 비워둘 수 없어.")
+            return
+
+        choices = []
+
+        for index in range(1, 5):
+            while True:
+                choice = input(f"{index}번 선택지를 입력해 줘: ").strip()
+
+                if choice:
+                    choices.append(choice)
+                    break
+
+                print("선택지는 비워둘 수 없어.")
+
+        while True:
+            answer = input("정답 번호를 입력해 줘 (1~4): ").strip()
+
+            if answer.isdigit() and 1 <= int(answer) <= 4:
+                answer = int(answer)
+                break
+
+            print("1부터 4 사이의 숫자를 입력해 줘.")
+
+        quiz = Quiz(question, choices, answer)
+
+        self.quizzes.append(quiz)
+        self.save_state()
+
+        print("퀴즈가 추가됐어!")
+
     def show_menu(self):
         print("\n===== 퀴즈 게임 =====")
         print("1. 퀴즈 풀기")
@@ -163,7 +200,7 @@ class QuizGame:
                     self.play_quiz()
 
                 elif choice == "2":
-                    print("퀴즈 추가 기능은 아직 구현하지 않았어.")
+                    self.add_quiz()
 
                 elif choice == "3":
                     print("퀴즈 목록 보기 기능은 아직 구현하지 않았어.")
