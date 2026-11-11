@@ -142,43 +142,49 @@ class QuizGame:
             print("최고 점수를 갱신했어!")
         else:
             print(f"현재 최고 점수: {self.high_score}점")
-
+    
     def add_quiz(self):
         print("\n===== 퀴즈 추가 =====")
 
-        question = input("질문을 입력해 줘: ").strip()
+        try:
+            question = input("질문을 입력해 줘: ").strip()
 
-        if not question:
-            print("질문은 비워둘 수 없어.")
-            return
+            if not question:
+                print("질문은 비워둘 수 없어.")
+                return
 
-        choices = []
+            choices = []
 
-        for index in range(1, 5):
+            for index in range(1, 5):
+                while True:
+                    choice = input(f"{index}번 선택지를 입력해 줘: ").strip()
+
+                    if choice:
+                        choices.append(choice)
+                        break
+
+                    print("선택지는 비워둘 수 없어.")
+
             while True:
-                choice = input(f"{index}번 선택지를 입력해 줘: ").strip()
+                answer = input("정답 번호를 입력해 줘 (1~4): ").strip()
 
-                if choice:
-                    choices.append(choice)
+                if answer.isdigit() and 1 <= int(answer) <= 4:
+                    answer = int(answer)
                     break
 
-                print("선택지는 비워둘 수 없어.")
+                print("1부터 4 사이의 숫자를 입력해 줘.")
 
-        while True:
-            answer = input("정답 번호를 입력해 줘 (1~4): ").strip()
+            quiz = Quiz(question, choices, answer)
 
-            if answer.isdigit() and 1 <= int(answer) <= 4:
-                answer = int(answer)
-                break
+            self.quizzes.append(quiz)
+            self.save_state()
 
-            print("1부터 4 사이의 숫자를 입력해 줘.")
+            print("퀴즈가 추가됐어!")
 
-        quiz = Quiz(question, choices, answer)
+        except (KeyboardInterrupt, EOFError):
+            print("\n퀴즈 추가를 취소했어.")
+            print("입력 중이던 퀴즈는 저장하지 않았어.")
 
-        self.quizzes.append(quiz)
-        self.save_state()
-
-        print("퀴즈가 추가됐어!")
 
     def list_quizzes(self):
         print("\n===== 퀴즈 목록 =====")
@@ -231,3 +237,4 @@ class QuizGame:
             except (KeyboardInterrupt, EOFError):
                 print("\n게임을 종료할게.")
                 break    
+            
