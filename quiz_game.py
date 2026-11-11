@@ -48,8 +48,9 @@ class QuizGame:
             )
         ]
 
+    
     def load_state(self):
-        # JSON 파일이 존재하지 않으면 종료
+        # JSON 파일이 존재하지 않으면 기본 데이터 사용
         if not self.state_file.exists():
             return
 
@@ -57,18 +58,50 @@ class QuizGame:
             with self.state_file.open("r", encoding="utf-8") as file:
                 data = json.load(file)
 
-            self.high_score = data.get("high_score", 0)
+            # 최상위 데이터 형식 검증
+            if not isinstance(data, dict):
+                raise ValueError("저장 데이터 형식이 올바르지 않아.")
 
-            self.quizzes = [
-                Quiz(
-                    item["question"],
-                    item["choices"],
-                    item["answer"]
-                )
-                for item in data.get("quizzes", [])
-            ]
+            high_score = data.get("high_score", 0)
+            quiz_data = data.get("quizzes", [])
 
-        except (json.JSONDecodeError, KeyError, TypeError, OSError) as e:
+            # 최고 점수 검증
+            if type(high_score) is not int or high_score < 0:
+                raise ValueError("최고 점수 데이터가 올바르지 않아.")
+
+            # 퀴즈 목록 검증
+            if not isinstance(quiz_data, list):
+                raise ValueError("퀴즈 목록 형식이 올바르지 않아.")
+
+            loaded_quizzes = []
+
+            for item in quiz_data:
+                if not isinstance(item, dict):
+                    raise ValueError("퀴즈 데이터 형식이 올바르지 않아.")
+
+                question = item.get("question")
+                choices = item.get("choices")
+                answer = item.get("answer")
+
+                if not isinstance(question, str) or not question.strip():
+                    raise ValueError("질문 데이터가 올바르지 않아.")
+
+                if (
+                    not isinstance(choices, list)
+                    or len(choices) != 4
+                    or not all(isinstance(choice, str) and choice.strip() for choice in choices)
+                ):
+                    raise ValueError("선택지 데이터가 올바르지 않아.")
+
+                if type(answer) is not int or not 1 <= answer <= 4:
+                    raise ValueError("정답 데이터가 올바르지 않아.")
+
+                loaded_quizzes.append(Quiz(question, choices, answer))
+
+            self.high_score = high_score
+            self.quizzes = loaded_quizzes
+
+        except (json.JSONDecodeError, KeyError, TypeError, OSError, ValueError) as e:
             print(f"저장 데이터 불러오기 오류: {e}")
             self.quizzes = []
             self.high_score = 0
@@ -142,7 +175,7 @@ class QuizGame:
             print("최고 점수를 갱신했어!")
         else:
             print(f"현재 최고 점수: {self.high_score}점")
-    
+
     def add_quiz(self):
         print("\n===== 퀴즈 추가 =====")
 
@@ -236,5 +269,4 @@ class QuizGame:
 
             except (KeyboardInterrupt, EOFError):
                 print("\n게임을 종료할게.")
-                break    
-            
+                break
