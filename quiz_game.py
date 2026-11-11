@@ -180,6 +180,19 @@ class QuizGame:
 
         print("퀴즈가 추가됐어!")
 
+    def list_quizzes(self):
+        print("\n===== 퀴즈 목록 =====")
+
+        if not self.quizzes:
+            print("등록된 퀴즈가 없어.")
+            return
+
+        for index, quiz in enumerate(self.quizzes, start=1):
+            print(f"\n[{index}] {quiz.question}")
+
+            for choice_index, choice in enumerate(quiz.choices, start=1):
+                print(f"  {choice_index}. {choice}")
+
     def show_menu(self):
         print("\n===== 퀴즈 게임 =====")
         print("1. 퀴즈 풀기")
@@ -203,7 +216,7 @@ class QuizGame:
                     self.add_quiz()
 
                 elif choice == "3":
-                    print("퀴즈 목록 보기 기능은 아직 구현하지 않았어.")
+                    self.list_quizzes()
 
                 elif choice == "4":
                     print(f"현재 최고 점수: {self.high_score}")
