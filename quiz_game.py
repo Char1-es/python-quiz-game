@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 
 from quiz import Quiz
@@ -87,10 +88,21 @@ class QuizGame:
 
         except (json.JSONDecodeError, KeyError, TypeError, OSError, ValueError) as e:
             print(f"저장 데이터 불러오기 오류: {e}")
+            self.backup_corrupted_file()
             print("기본 퀴즈 데이터로 초기화할게.")
 
             self.quizzes = []
             self.high_score = None
+
+    def backup_corrupted_file(self):
+        """손상된 state.json을 state.json.corrupt로 보관해 수동 복구할 수 있게 한다."""
+        backup_file = self.state_file.with_name(self.state_file.name + ".corrupt")
+
+        try:
+            os.replace(self.state_file, backup_file)
+            print(f"손상된 파일은 {backup_file.name}으로 보관했어.")
+        except OSError as e:
+            print(f"손상된 파일 백업 실패: {e}")
 
     def save_state(self):
         data = {
@@ -105,9 +117,14 @@ class QuizGame:
             ],
         }
 
+        # 임시 파일에 먼저 쓴 뒤 교체해서, 저장 도중 중단돼도 기존 파일이 깨지지 않게 한다.
+        temp_file = self.state_file.with_name(self.state_file.name + ".tmp")
+
         try:
-            with self.state_file.open("w", encoding="utf-8") as file:
+            with temp_file.open("w", encoding="utf-8") as file:
                 json.dump(data, file, ensure_ascii=False, indent=4)
+
+            os.replace(temp_file, self.state_file)
 
         except OSError as e:
             print(f"저장 데이터 기록 오류: {e}")
