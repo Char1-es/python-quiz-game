@@ -96,8 +96,6 @@ $ git --version
 git version 2.56.0
 $ git config user.name
 Char1-es
-$ git config user.email
-kch1759@gmail.com
 $ git remote -v
 origin	git@github.com:Char1-es/python-quiz-game.git (fetch)
 origin	git@github.com:Char1-es/python-quiz-game.git (push)
