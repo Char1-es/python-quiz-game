@@ -279,7 +279,7 @@ $ git branch -a
 ## Git 작업 방식
 
 - **저장소**: https://github.com/Char1-es/python-quiz-game (`origin`, SSH)
-- **커밋 수**: main 기준 17개 (병합 커밋 1개 포함)
+- **커밋 수**: main 기준 19개 (병합 커밋 2개 포함)
 
 ### 커밋 메시지 규칙
 
@@ -297,6 +297,7 @@ $ git branch -a
 
 - `main`: 항상 실행 가능한 상태를 유지하는 기준 브랜치입니다.
 - `feature/quiz-play`: 퀴즈 풀기·추가·목록·점수 등 게임 기능을 개발한 브랜치입니다.
+- `feature/safe-storage`: 원자적 저장과 손상 파일 백업 기능을 추가한 브랜치입니다. (병합 사유: 평가에서 지적된 저장 안정성 보완)
 - 기능 개발은 `main`에서 feature 브랜치를 분기해 진행하고, 기능이 동작하는 것을 확인한 뒤 `git merge --no-ff`로 `main`에 병합합니다. `--no-ff`를 써서 어떤 기능이 언제 합쳐졌는지 그래프에 남깁니다. (병합 커밋: `24910ad`)
 - README 같은 문서 수정은 `main`에 바로 커밋했습니다.
 
