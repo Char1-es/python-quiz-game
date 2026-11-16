@@ -85,6 +85,30 @@ python-quiz-game/
 
 형식이 올바르지 않으면 손상된 파일로 간주하고 기본 퀴즈로 초기화합니다.
 
+## 개발 환경
+
+터미널에서 직접 실행한 결과입니다. (macOS 26.2)
+
+```
+$ python3 --version
+Python 3.15.2
+$ git --version
+git version 2.56.0
+$ git config user.name
+Char1-es
+$ git config user.email
+kch1759@gmail.com
+$ git remote -v
+origin	git@github.com:Char1-es/python-quiz-game.git (fetch)
+origin	git@github.com:Char1-es/python-quiz-game.git (push)
+$ git branch -a
+  feature/quiz-play
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/feature/quiz-play
+  remotes/origin/main
+```
+
 ## 실행 결과
 
 실제로 `python3 main.py`를 실행한 결과입니다. `<입력>` 표시는 사용자가 입력한 값입니다.
